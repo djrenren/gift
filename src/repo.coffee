@@ -15,8 +15,11 @@ module.exports = class Repo
       @dot_git = @path
     else
       @dot_git = "#{@path}/.git"
-    @git  = cmd @path, @dot_git
+    @git  = cmd @path, @dot_git, @ssh
 
+
+  add_ssh_key: (key) ->
+    @git.ssh = key
 
   # Public: Get the commit identity for this repository.
   #

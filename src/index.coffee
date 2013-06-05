@@ -1,5 +1,6 @@
 {exec} = require 'child_process'
 Repo   = require './repo'
+cmd    = require './git'
 
 # Public: Create a Repo from the given path.
 # 
@@ -18,3 +19,14 @@ Git.init = (path, callback) ->
   , (err, stdout, stderr) ->
     return callback err if err
     return callback err, (new Repo path)
+
+Git.clone = (path, url, ssh, callback) ->
+  bash = "git clone #{url} #{path}"
+  if ssh
+    bash = "ssh-agent bash -c 'ssh-add #{ssh}; #{bash}'"
+  exec bash,{}, (err, stdout, stderr) ->
+    return callback err if err
+    repo = new Repo path
+    repo.add_ssh_key ssh
+    return callback err, repo
+

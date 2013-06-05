@@ -1,9 +1,8 @@
 fs     = require 'fs'
 {exec} = require 'child_process'
 
-module.exports = Git = (git_dir, dot_git) ->
+module.exports = Git = (git_dir, dot_git, ssh) ->
   dot_git ||= "#{git_dir}/.git"
-  
   git = (command, options, args, callback) ->
     [callback, args]    = [args, callback] if !callback
     [callback, options] = [options, callback] if !callback
@@ -13,9 +12,11 @@ module.exports = Git = (git_dir, dot_git) ->
     args    ?= []
     args     = args.join " " if args instanceof Array
     bash     = "#{Git.bin} #{command} #{options} #{args}"
+    if git.ssh
+      bash = "ssh-agent bash -c 'ssh-add #{git.ssh}; #{bash}'"
+    console.log bash
     exec bash, {cwd: git_dir}, callback
     return bash
-  
   
   # Public: Get a list of the remote names.
   # 
