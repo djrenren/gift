@@ -329,3 +329,17 @@ module.exports = class Repo
                 return callback null
             else
               return callback null
+
+  pull: (remote_name, branch_name, callback) ->
+    # handle 'curried' arguments
+    [remote, branch] = [remote_name, branch_name]                     if typeof callback    is "function"
+    [remote, branch, callback] = ["origin", remote_name, branch_name] if typeof branch_name is "function"
+    [remote, branch, callback] = ["origin", "master", remote_name]    if typeof remote_name is "function"
+
+    @status (err, status) =>
+      return callback err if err
+      @git "stash", {}, ["save"], (err) =>
+        return callback err if err
+        @git "pull", {}, [remote, branch], (err) =>
+          return callback err if err
+          return callback null

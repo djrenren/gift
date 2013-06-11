@@ -13,9 +13,12 @@ module.exports = Git = (git_dir, dot_git, ssh) ->
     args     = args.join " " if args instanceof Array
     bash     = "#{Git.bin} #{command} #{options} #{args}"
     if git.ssh
-      bash = "ssh-agent bash -c 'ssh-add #{git.ssh}; #{bash}'"
+      bash = "ssh-agent bash -c 'ssh-add #{git.ssh};'"
     console.log bash
-    exec bash, {cwd: git_dir}, callback
+    console.log "GIT DIR: '"+git_dir + "'";
+    exec bash , {cwd: git_dir }, () ->
+      console.log arguments
+      callback.apply this, arguments
     return bash
   
   # Public: Get a list of the remote names.
