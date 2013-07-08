@@ -88,6 +88,10 @@ module.exports = class Repo
     Commit.find_all this, start, {"max-count": limit, skip}, callback
 
 
+  commitsSince: (commit_id, callback) ->
+    throw new Error "a callback is required" if !callback
+    Commit.find_since this, commit_id, callback
+
   # Public: The tree object for the treeish or master.
   #
   # treeish - String treeish (such as a branch or tag) (optional).

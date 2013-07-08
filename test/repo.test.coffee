@@ -74,6 +74,17 @@ describe "Repo", ->
         ident.name.should.eql  name
         ident.email.should.eql email
 
+  describe "#commitsSince", ->
+    repo      = fixtures.branched
+    commit_id =  'b045ec4b14c60f03329654266478b6e8b92b33c5^'
+    commits = null
+    before (done) ->
+      repo.commitsSince commit_id, (err, _commits) ->
+        commits = _commits
+        done err
+
+    it "should have stuff", ->
+      commits.should.be.an.instanceof Array
 
   describe "#commits", ->
     describe "with only a callback", ->
@@ -85,6 +96,7 @@ describe "Repo", ->
           done err
 
       it "passes an Array", ->
+        console.log commits
         commits.should.be.an.instanceof Array
 
       it "is a list of commits", ->

@@ -12,7 +12,7 @@
 , "main": "./lib/index"
 
 , "scripts":
-  { "test":       "mocha --compilers coffee:'./node_modules/coffee-script/lib/coffee-script/coffee-script'"
+  { "test":       "mocha --compilers coffee:coffee-script"
   , "prepublish": "coffee -o lib -c src"
   }
 

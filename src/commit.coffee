@@ -40,6 +40,12 @@ module.exports = class Commit
       return callback err if err
       return callback null, @parse_commits(repo, stdout)[0]
   
+  @find_since: (repo, commit_id, callback) ->
+    options = {pretty: "raw", "max-count": 1000}
+    repo.git "rev-list", options, "#{commit_id}..HEAD"
+    , (err, stdout, stderr) =>
+      return callback err if err
+      return callback null, @parse_commits(repo, stdout)
   
   @find_commits: (repo, ids, callback) ->
     commits = []
